@@ -80,7 +80,7 @@ public class ResultFragment extends Fragment {
             new GetImage(getActivity()).execute(imageUrl);
 
         } catch (Exception ex) {
-            //a bit hacky, since this assumes any serialization error was the result of an invalid zip.
+            //a bit hacky, since this assumes any serialization error was the result of an invalid zip (which is pretty likely)
             Toast.makeText(getActivity(),R.string.invalid_zip,Toast.LENGTH_SHORT).show();
             mTemperature.setText(null);
             mLocation.setText(null);
@@ -96,7 +96,7 @@ public class ResultFragment extends Fragment {
         if (temperature>=68 && temperature <78) {return R.string.result_nice;}
         else {return R.string.result_hot;}
     }
-
+    //Did not want to get lock up the main thread with grabbing the image, so I made it async.
     private class GetImage extends AsyncTask<String, Void, Bitmap> {
 
         private Context mContext;
