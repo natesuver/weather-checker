@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Weather Checker:  Is it nice out?</string>
+    <string name="search_hint">Enter a valid zip code</string>
+    <string name="search_button_label">Search</string>
+    <string name="search_validation_error">Please enter valid search criteria</string>
+    <string name="base_api_url">http://api.wunderground.com/api/{0}/conditions/q/{1}.json</string>
+    <string name="api_key">5c50d3a7da5ec314</string>
+</resources>
