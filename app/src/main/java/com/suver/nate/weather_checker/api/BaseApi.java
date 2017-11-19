@@ -1,8 +1,8 @@
 package com.suver.nate.weather_checker.api;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
-
-import com.suver.nate.weather_checker.R;
 
 import org.json.JSONObject;
 
@@ -28,7 +28,7 @@ public abstract class BaseApi {
             connection.setRequestMethod("GET");
             connection.addRequestProperty("Content-Type", content_type);
             connection.setDoOutput(true);
-            if (parameters.length()>0) { //only write parms if they are specified
+            if (parameters.length()>0) { //only write parms to the outgoing request if they are specified
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(parameters);
                 wr.flush();
@@ -37,7 +37,7 @@ public abstract class BaseApi {
 
             int responseCode = connection.getResponseCode();
             InputStream stream;
-            if (responseCode!=200) {
+            if (responseCode!=200) { //200 is success, everything else, for this purpose, is not a success.
                 stream = connection.getErrorStream();
             }
             else {
@@ -90,5 +90,18 @@ public abstract class BaseApi {
             Log.e(LOG,ex.getMessage());
             throw new AssertionError("UTF not found on this device");
         }
+    }
+
+    protected Bitmap ExecuteBitmapRequest(String url) {
+        try {
+            URL u = new URL(url);
+            Bitmap bmp = BitmapFactory.decodeStream(u.openConnection().getInputStream());
+            return bmp;
+        }
+        catch (Exception ex) {
+            Log.e(LOG,ex.getMessage());
+            return null;
+        }
+
     }
 }

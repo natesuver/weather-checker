@@ -5,4 +5,13 @@
     <string name="search_validation_error">Please enter valid search criteria</string>
     <string name="base_api_url">http://api.wunderground.com/api/{0}/conditions/q/{1}.json</string>
     <string name="api_key">5c50d3a7da5ec314</string>
+    <string name="location_label"><b>Location:</b></string>
+    <string name="temperature_label"><b>Temperature:</b></string>
+    <string name="conditions_label"><b>Conditions:</b></string>
+    <string name="invalid_zip">This does not look like a valid zip code.  Try again.</string>
+    <string name="invalid_data">We encountered some invalid data.  Try another search.</string>
+    <string name="result_freezing">It is below freezing!  Too cold!</string>
+    <string name="result_cold">It is pretty cold</string>
+    <string name="result_nice">It is nice out!</string>
+    <string name="result_hot">It is hot out!</string>
 </resources>

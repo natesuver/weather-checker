@@ -1,5 +1,4 @@
 package com.suver.nate.weather_checker;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,14 +18,28 @@ import org.json.JSONObject;
  */
 
 public class SearchFragment extends Fragment {
-
+    private OnSearchListener mCallback;
     private Button mButton;
     private EditText mEditor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //no need to save instance state here, since the only data we keep is in the EditText, which preserves it by default
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        WeatherActivity a;
+        if (context instanceof WeatherActivity){
+            a=(WeatherActivity) context;
+            try {
+                mCallback = (OnSearchListener) a;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(a.toString() + " must implement OnSearchListener");
+            }
+        }
     }
 
     @Override
@@ -68,7 +81,7 @@ public class SearchFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            //do something to ui maybe
+            mCallback.OnSearch(result);
         }
     }
 }
