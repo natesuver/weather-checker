@@ -1,5 +1,7 @@
 package com.suver.nate.weather_checker;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.suver.nate.weather_checker.api.WundergroundApi;
 import com.suver.nate.weather_checker.models.City;
 
 import org.json.JSONArray;
@@ -23,6 +26,7 @@ import java.util.List;
  */
 
 public class StateResultFragment extends Fragment implements WeatherResult {
+    private OnSearchListener mCallback;
     private static final String instance_key = "stateresult";
     private RecyclerView mRecycleView;
     private String mLastResult;
@@ -33,6 +37,19 @@ public class StateResultFragment extends Fragment implements WeatherResult {
         super.onCreate(savedInstanceState);
         if (savedInstanceState!=null) {
             retrieveData(savedInstanceState);
+        }
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        WeatherActivity a;
+        if (context instanceof WeatherActivity){
+            a=(WeatherActivity) context;
+            try {
+                mCallback = (OnSearchListener) a;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(a.toString() + " must implement OnSearchListener");
+            }
         }
     }
     @Override
@@ -108,7 +125,7 @@ public class StateResultFragment extends Fragment implements WeatherResult {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), mCityData.getCityName() + " has been clicked!",Toast.LENGTH_SHORT).show();
+            new Search(getActivity().getBaseContext()).execute(mCityData.getResourceUrl());
         }
     }
 
@@ -133,6 +150,25 @@ public class StateResultFragment extends Fragment implements WeatherResult {
         public int getItemCount() {
             return mCities.size();
         }
+    }
 
+    private class Search extends AsyncTask<String, Void, JSONObject> {
+
+        private Context mContext;
+        private JSONObject mResult;
+        public Search (Context context){
+            mContext = context;
+        }
+        @Override
+        protected JSONObject doInBackground(String... params){
+            WundergroundApi api = new WundergroundApi(mContext);
+            mResult = api.SearchByZmwCode(params[0]);
+            return mResult;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            mCallback.OnSearch(result, SearchType.Zip);
+        }
     }
 }

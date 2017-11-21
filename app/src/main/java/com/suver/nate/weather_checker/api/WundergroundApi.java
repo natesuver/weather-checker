@@ -21,8 +21,13 @@ public class WundergroundApi extends BaseApi {
         mApiKey = context.getString(R.string.api_key); //this is my personal key, plz don't share :)
     }
 
-    public JSONObject SearchByZip(String criteria) {
-        String url = mBaseApiUrl.replace("{0}",mApiKey).replace("{1}", BuildParm(criteria));
+    public JSONObject SearchByText(String criteria) {
+        String url = mBaseApiUrl.replace("{0}",mApiKey).replace("{1}", "/q/"+ BuildParm(criteria) + ".json");
+        return ExecuteRequest(url,"application/json","");
+    }
+    //zmw code is provided with certain results in the api, it makes searching for current conditions very precise (e.g. when a user clicks on a city, etc..)
+    public JSONObject SearchByZmwCode(String partialPath) {
+        String url = mBaseApiUrl.replace("{0}",mApiKey).replace("{1}", partialPath + ".json");
         return ExecuteRequest(url,"application/json","");
     }
 

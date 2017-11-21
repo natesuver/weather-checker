@@ -15,25 +15,8 @@ public class WeatherActivity extends AppCompatActivity implements OnSearchListen
         setContentView(R.layout.activity_weather);
         FragmentManager fm = getSupportFragmentManager();
         CreateSearchFragment(fm);
-        //CreateResultFragment(fm);
-    }
- /*
-    private void CreateResultFragment(FragmentManager fm) {
-        Fragment frag = fm.findFragmentById(R.id.result_container);
-        if (frag==null) {
-            frag = new ResultFragment();
-            fm.beginTransaction().add(R.id.result_container,frag).commit();
-        }
     }
 
-    private void CreateStateResultFragment(FragmentManager fm) {
-        Fragment frag = fm.findFragmentById(R.id.result_container);
-        if (frag==null) {
-            frag = new StateResultFragment();
-            fm.beginTransaction().add(R.id.result_container,frag).commit();
-        }
-    }
-*/
     private void CreateSearchFragment(FragmentManager fm) {
         Fragment frag = fm.findFragmentById(R.id.search_container);
         if (frag==null) {
