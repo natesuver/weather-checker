@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.Spinner;
+import android.widget.RadioButton;
 import com.suver.nate.weather_checker.api.WundergroundApi;
 
 import org.json.JSONObject;
@@ -21,7 +23,10 @@ public class SearchFragment extends Fragment {
     private OnSearchListener mCallback;
     private Button mButton;
     private EditText mEditor;
-
+    private RadioButton mRadioZip;
+    private RadioButton mRadioState;
+    private Spinner mState;
+    private SearchType mSearchType;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +52,42 @@ public class SearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_search,container,false);
         mButton = v.findViewById(R.id.zip_search);
         mEditor = v.findViewById(R.id.zip_text);
+        mRadioZip = v.findViewById(R.id.radioZip);
+        mRadioState = v.findViewById(R.id.radioState);
+        mState = v.findViewById(R.id.state_spinner);
 
+        mRadioZip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchType = SearchType.Zip;
+                mState.setVisibility(View.GONE);
+                mEditor.setVisibility(View.VISIBLE);
+                mButton.setVisibility(View.VISIBLE);
+            }
+        });
+        mRadioState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchType = SearchType.State;
+                mEditor.setVisibility(View.GONE);
+                mState.setVisibility(View.VISIBLE);
+                mButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        setupStateSpinner(v);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setError(null);
-                String search = mEditor.getText().toString();
-                if (search.length()==0) {
+                String search;
+                if (mSearchType == SearchType.Zip) {
+                    search = mEditor.getText().toString();
+                } else {
+                    search = mState.getSelectedItem().toString();
+                }
+
+                if (mSearchType == SearchType.Zip && search.length()==0) {
                     mEditor.setError(getText(R.string.search_validation_error));
                     return;
                 }
@@ -63,6 +97,13 @@ public class SearchFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void setupStateSpinner(View v) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.states_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mState.setAdapter(adapter);
     }
 
     private class Search extends AsyncTask<String, Void, JSONObject> {
@@ -81,7 +122,7 @@ public class SearchFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            mCallback.OnSearch(result);
+            mCallback.OnSearch(result, mSearchType);
         }
     }
 }

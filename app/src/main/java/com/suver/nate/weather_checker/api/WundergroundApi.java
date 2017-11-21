@@ -21,8 +21,8 @@ public class WundergroundApi extends BaseApi {
         mApiKey = context.getString(R.string.api_key); //this is my personal key, plz don't share :)
     }
 
-    public JSONObject SearchByZip(String zipcode) {
-        String url = mBaseApiUrl.replace("{0}",mApiKey).replace("{1}", BuildParm(zipcode));
+    public JSONObject SearchByZip(String criteria) {
+        String url = mBaseApiUrl.replace("{0}",mApiKey).replace("{1}", BuildParm(criteria));
         return ExecuteRequest(url,"application/json","");
     }
 

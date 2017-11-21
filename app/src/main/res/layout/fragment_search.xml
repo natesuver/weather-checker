@@ -4,7 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="10dp">
-
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/responseGroup">
+        <RadioButton android:id="@+id/radioZip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio1" />
+        <RadioButton android:id="@+id/radioState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio2" />
+    </RadioGroup>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,11 +26,20 @@
         android:id="@+id/zip_text"
         android:maxLines="1"
         android:inputType="text"
+        android:visibility="gone"
         />
+
+    <Spinner
+        android:id="@+id/state_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <Button android:layout_height="wrap_content"
         android:id="@+id/zip_search"
         android:layout_width="wrap_content"
         android:text="@string/search_button_label"
+        android:visibility="gone"
         >
 
     </Button>

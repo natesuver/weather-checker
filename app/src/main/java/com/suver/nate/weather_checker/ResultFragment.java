@@ -22,7 +22,7 @@ import static android.content.ContentValues.TAG;
  * Created by nates on 11/18/2017.
  */
 
-public class ResultFragment extends Fragment {
+public class ResultFragment extends Fragment implements WeatherResult {
     private static final String instance_key = "result";
     private TextView mLocation;
     private TextView mTemperature;
@@ -67,6 +67,9 @@ public class ResultFragment extends Fragment {
         mLastResult = savedInstanceState.getString(instance_key);
     }
 
+    public void SetResult(String result) {
+        mLastResult = result.toString();
+    }
     public void SetResult(JSONObject result) {
         try { //todo: refactor to model, maybe using GSON
             mLastResult = result.toString();

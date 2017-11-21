@@ -14,22 +14,49 @@ public class WeatherActivity extends AppCompatActivity implements OnSearchListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         FragmentManager fm = getSupportFragmentManager();
+        CreateSearchFragment(fm);
+        //CreateResultFragment(fm);
+    }
+ /*
+    private void CreateResultFragment(FragmentManager fm) {
+        Fragment frag = fm.findFragmentById(R.id.result_container);
+        if (frag==null) {
+            frag = new ResultFragment();
+            fm.beginTransaction().add(R.id.result_container,frag).commit();
+        }
+    }
+
+    private void CreateStateResultFragment(FragmentManager fm) {
+        Fragment frag = fm.findFragmentById(R.id.result_container);
+        if (frag==null) {
+            frag = new StateResultFragment();
+            fm.beginTransaction().add(R.id.result_container,frag).commit();
+        }
+    }
+*/
+    private void CreateSearchFragment(FragmentManager fm) {
         Fragment frag = fm.findFragmentById(R.id.search_container);
         if (frag==null) {
             frag = new SearchFragment();
             fm.beginTransaction().add(R.id.search_container,frag).commit();
         }
-        frag = fm.findFragmentById(R.id.result_container);
-        if (frag==null) {
-            frag = new ResultFragment();
-            fm.beginTransaction().add(R.id.result_container,frag).commit();
-        }
-
     }
 
     @Override
-    public void OnSearch(JSONObject result) {
-        ResultFragment r = (ResultFragment) getSupportFragmentManager().findFragmentById(R.id.result_container);
-        r.SetResult(result);
+    public void OnSearch(JSONObject result, SearchType type) {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragResult = fm.findFragmentById(R.id.result_container);
+        if (fragResult!=null) {
+            fm.beginTransaction().remove(fragResult).commit();
+        }
+        Fragment frag;
+        if (type==SearchType.State) {
+            frag = new StateResultFragment();
+        } else {
+            frag = new ResultFragment();
+        }
+        fm.beginTransaction().add(R.id.result_container, frag).commit();
+        WeatherResult wr = (WeatherResult) frag;
+        wr.SetResult(result.toString());
     }
 }

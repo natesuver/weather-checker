@@ -7,5 +7,5 @@ import org.json.JSONObject;
  */
 
 public interface OnSearchListener {
-    public void OnSearch(JSONObject result);
+    public void OnSearch(JSONObject result, SearchType type);
 }
